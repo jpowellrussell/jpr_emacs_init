@@ -1,0 +1,33 @@
+;;; Elfeed score file                                     -*- lisp -*-
+((version 4)
+ ("title"
+  ("Assorted Links" 500 s 1600876951.629575)
+  ("Open Thread" -500 s nil))
+ ("content")
+ ("title-or-content"
+  ("Bias" 500 200 nil 1600876951.690425)
+  ("Blockchain" 200 100 s nil)
+  ("Credibility" 500 200 s 1600876951.660542)
+  ("Lisp" 200 100 s 1600876951.640436))
+ ("tag")
+ ("authors"
+  ("Tabarrok" -100 s 1600876951.816567))
+ ("feed"
+  ("Armed and Dangerous" 1000 s t 1600555626.117638)
+  ("Cal Newport" 200 s t 1600876951.778872)
+  ("Civilization Emerging" 600 s t nil)
+  ("Cognitive Medium" 600 s t nil)
+  ("Dan Wang" 600 s t nil)
+  ("Ecosophia" 200 s t 1600876951.783381)
+  ("Farnam Street" 300 s t 1600876951.690616)
+  ("https://killsixbilliondemons.com/feed/" 1000 s u 1600555626.174233)
+  ("Marginal Revolution" 100 s t 1600876951.815839)
+  ("Paul Graham" 700 s t 1600876951.64004)
+  ("Patrick Rothfuss" 300 s t 1600876951.670719)
+  ("Slate Star Codex" 600 s t 1600876951.62254)
+  ("Stratechery" 500 s t 1600876951.653175)
+  ("Protomen" 500 s t nil)
+  ("Wait But Why" 1000 s t 1600815554.756548)
+  ("West Hunter" 600 s t 1600876951.635351))
+ (mark -1)
+ ("adjust-tags"))
