@@ -1,0 +1,2 @@
+# jpr_emacs_init
+This repository holds my personal Emacs configuration files. I've followed the organizational scheme laid out by Xah in [organize your dot emacs](http://ergoemacs.org/emacs/organize_your_dot_emacs.html). I rely on [straight.el](https://github.com/raxod502/straight.el) for package management and [use-package.el](https://github.com/jwiegley/use-package) for formatting my init files. If you have any questions or see that I'm doing something fishy, please let me know, I'm still pretty new to this. 
