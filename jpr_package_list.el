@@ -103,6 +103,7 @@ Written by Xah, found at http://ergoemacs.org/emacs/organize_your_dot_emacs.html
                             "init_pyvenv.el"
 			    "init_rainbow-delimiters.el"
                             "init_s.el"
+                            "init_slime.el"
                             "init_smart-mode-line.el"
                             "init_smex.el"
 			    ;;"init_snails.el"

@@ -41,6 +41,9 @@
 ;; Opens frame maximized (can still see dock and menu bar on MacOS)
 (add-to-list 'default-frame-alist '(fullscreen .  maximized))
 
+;; Select Help Window after opening it (for easy closing, mostly)
+(setq-default help-window-select t)
+
 ;; Automatically insert line breaks in white space before the 80 column mark
 (setq-default fill-column 80)
 (add-hook 'python-mode-hook (lambda () fill-column 79))
