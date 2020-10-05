@@ -14,6 +14,7 @@
 ;;; Code:
 (use-package ov
   :straight t
+  :defer t
   )
 
 (provide 'init_ov)

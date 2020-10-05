@@ -18,9 +18,10 @@
 ;;; Code:
 (use-package org
   :straight t
+  :defer t
   :mode ("\\.org$" . org-mode)
   :hook (org-mode . flyspell-mode)
-        (org-mode . variable-pitch-mode)
+        ;(org-mode . variable-pitch-mode)
         (org-mode . (lambda ()
                       (setq-local yas/trigger-key [tab])
                       (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand)))

@@ -14,6 +14,7 @@
 ;;; Code:
 (use-package org-make-toc
   :straight t
+  :defer t
   )
 
 (provide 'init_org-make-toc)

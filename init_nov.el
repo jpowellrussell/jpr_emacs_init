@@ -17,6 +17,7 @@
 
 (use-package nov
   :straight t
+  :defer t
   :mode ("\\.epub\\'" .  nov-mode)
   :config (defun my-nov-font-setup ()
   (face-remap-add-relative 'variable-pitch :family "Crimson"

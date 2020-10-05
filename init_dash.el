@@ -14,6 +14,7 @@
 ;;; Code:
 (use-package dash
   :straight t
+  :defer t
   )
 
 (provide 'init_dash)

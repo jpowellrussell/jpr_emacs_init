@@ -17,6 +17,7 @@
 ;;; Code:
 (use-package org-noter
   :straight t
+  :defer t
   :config
   (setq-default org-noter-auto-save-last-location t)
   (setq org-noter-notes-search-path '("~/dropbox/khs/reading_thoughts"

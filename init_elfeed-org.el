@@ -11,6 +11,7 @@
 
 (use-package elfeed-org
   :straight t
+  :defer t
   :config (elfeed-org)
   )
 

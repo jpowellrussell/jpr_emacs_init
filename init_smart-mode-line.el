@@ -14,6 +14,7 @@
 ;;; Code:
 (use-package smart-mode-line
   :straight t
+  :defer t
   )
 
 (provide 'init_smart-mode-line)

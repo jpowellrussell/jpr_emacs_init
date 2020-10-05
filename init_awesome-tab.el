@@ -17,6 +17,7 @@
 (use-package awesome-tab
   :straight (awesome-tab :type git :host github
 			 :repo "manateelazycat/awesome-tab")
+  :defer t
   :config
   (setq awesome-tab-height 110)
   (setq awesome-tab-active-bar-height 15)

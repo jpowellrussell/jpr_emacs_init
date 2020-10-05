@@ -14,6 +14,7 @@
 
 ;;; Code:
 (use-package s
+  :defer t
   :straight t
   )
 

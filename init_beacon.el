@@ -15,6 +15,7 @@
 ;;; Code:
 (use-package beacon
   :straight t
+  :defer t
   :bind ("C-c b" . beacon-blink)
   :config
   (beacon-mode 1)

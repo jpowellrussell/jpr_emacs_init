@@ -1,22 +1,25 @@
-;;; init_markdown-mode+.el --- Set up additional features for Markdown Mode
+;;; init_slime.el --- Configure Slime, an interactive common lisp minor mode
 
 ;; ==============================================================================
-;; Markdown Mode+ Set Up
+;; Slime Set Up
 ;; ==============================================================================
 ;; Written by Jeff Russell
-;; Updated: 2020-10-05 1303
+;; Updated: 2020-10-04 1739
 ;; jpowellrussell.com
 ;; ------------------------------------------------------------------------------
 
 ;;; Commentary:
-;; Additional functions for Markdown Mode
+;; This is recommended by the SBCL website, so let's see how it goes.
 
 ;;; Code:
-(use-package markdown-mode+
+(use-package slime
+  :ensure t
   :straight t
   :defer t
+  :config
+  (setq inferior-lisp-program "sbcl")
   )
 
-(provide 'init_markdown-mode+)
+(provide 'init_slime)
 
-;;; init_markdown-mode+.el ends here
+;;; init_slime.el ends here

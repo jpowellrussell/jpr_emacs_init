@@ -18,6 +18,7 @@
 ;;; Code:
 (use-package font-lock+
   :straight t
+  :defer t
   )
 
 (provide 'init_font-lock+)

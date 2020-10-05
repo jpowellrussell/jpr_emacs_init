@@ -14,7 +14,9 @@
 ;;; Code:
 (use-package jedi
   :straight t
+  :defer t
+  :hook (python-mode . jedi-mode)
   )
 
-;;; (provide (buffer-name))
+(provide 'init_jedi)
 ;;; init_jedi.el ends here

@@ -16,6 +16,7 @@
 ;;; Code:
 (use-package org-sidebar
   :straight t
+  :defer t
   )
 
 (provide 'init_org-sidebar)

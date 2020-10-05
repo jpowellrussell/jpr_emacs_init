@@ -16,5 +16,5 @@
   :config (setq visible-bell nil)
   )
 
-;;; (provide 'init_better-defaults)
+(provide 'init_better-defaults)
 ;;; init_better-defaults.el ends here

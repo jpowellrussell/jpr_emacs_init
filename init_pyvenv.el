@@ -14,7 +14,8 @@
 ;;; Code:
 (use-package pyvenv
   :straight t
+  :defer t
   )
 
-;;; (provide 'init_pyenv.el)
+(provide 'init_pyenv)
 ;;; init_pyvenv.el ends here

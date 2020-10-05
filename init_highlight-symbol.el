@@ -10,6 +10,7 @@
 
 (use-package highlight-symbol
   :straight t
+  :defer t
   :config
   (highlight-symbol-mode))
 

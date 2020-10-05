@@ -1,4 +1,4 @@
-;;; init_zenburn.el --- Set up Zenburn Theme
+;;; init_zenburn-theme.el --- Set up Zenburn Theme
 
 ;; ==============================================================================
 ;; Zenburn Theme Set Up
@@ -18,6 +18,5 @@
   :config (load-theme 'zenburn t)
   )
 
-(provide 'init_zenburn)
-
-;;; init_zenburn.el ends here
+(provide 'init_zenburn-theme)
+;;; init_zenburn-theme.el ends here
