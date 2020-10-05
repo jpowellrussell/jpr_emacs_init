@@ -15,6 +15,7 @@
 ;;; Code:
 (straight-use-package
  '(pdf-tools-org :type git :host github :repo "machc/pdf-tools-org")
+ :defer t
   )
 
 (provide 'init_pdf-tools-org)

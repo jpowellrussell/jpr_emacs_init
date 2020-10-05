@@ -14,6 +14,7 @@
 ;;; Code:
 (use-package org-bullets
   :straight t
+  :defer t
   :hook (org-mode . org-bullets-mode)
   :config
   (setq org-bullets-bullet-list

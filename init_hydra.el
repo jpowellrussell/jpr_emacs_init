@@ -14,6 +14,7 @@
 ;;; Code:
 (use-package hydra
   :straight t
+  :defer t
   )
 
 (provide 'init_hydra)

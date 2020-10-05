@@ -10,6 +10,7 @@
 
 (use-package pdf-view-restore
   :straight t
+  :defer t
   :after pdf-tools
   :hook (pdf-view-mode . pdf-view-restore-mode)
   )

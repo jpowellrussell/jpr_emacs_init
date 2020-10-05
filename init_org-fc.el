@@ -18,6 +18,7 @@
   (org-fc
    :type git :host github :repo "l3kn/org-fc"
    :files (:defaults "awk" "demo.org"))
+  :defer t
   :bind ("C-c f" . org-fc-hydra/body)
   :custom
   (org-fc-directories '("~/dropbox/khs/increading/"))

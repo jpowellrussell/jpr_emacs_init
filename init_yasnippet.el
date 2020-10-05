@@ -1,12 +1,20 @@
-;; ;; =============================================================================
-;; ;; YASnippet Text Expansion Set Up
-;; ;; =============================================================================
-;; Written by Jeff Russell
-;; Updated 2020-04-15
-;; jpowellrussell.com
-;; -----------------------------------------------------------------------------
+;;; init_yasnippet.el --- Set up snippet completion tool
 
-;; Yasnippet is a snippet expander. Apparently it can do a lot of great stuff, but right now I only have a snippet for my slip layout.
+;; ==============================================================================
+;; YASnippet Text Expansion Set Up
+;; ==============================================================================
+;; Written by Jeff Russell
+;; Updated: 2020-10-05 1320
+;; jpowellrussell.com
+;; ------------------------------------------------------------------------------
+
+;;; Commentary:
+
+;; Yasnippet is a snippet expander. I'm currently using it for slipbox layout,
+;; my daily todo, and my initialization files, but I might find some more uses
+;; for it, such as email templates.
+
+;;; Code:p
 (use-package yasnippet
   :straight t
   :config
@@ -19,4 +27,6 @@
   ;;(setq yas-snippet-dirs "~/.emacs.d/snippets/")
   )
 
-;; init_yas.el ends here
+(provide 'init_yasnippet)
+
+;;; init_yasnippet.el ends here

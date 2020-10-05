@@ -14,6 +14,7 @@
 ;;; Code:
 (use-package counsel
   :straight t
+  :defer t
   :init
   (ido-mode -1)
   :config

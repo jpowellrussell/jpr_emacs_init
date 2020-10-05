@@ -14,6 +14,7 @@
 ;;; Code:
 (use-package company-org-roam
   :straight (:host github :type git :repo "org-roam/company-org-roam")
+  :defer t
   :config
   (push 'company-org-roam company-backends)
   )

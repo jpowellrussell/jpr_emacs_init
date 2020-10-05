@@ -23,6 +23,7 @@
 ;;; Code:
 (use-package deft
   :bind ("C-c C-;" . deft)
+  :defer t
   :config
   (setq deft-search-directory "~/dropbox/slipbox/" ; modified to have two dirs
         deft-write-directory "~/dropbox/slipbox/0-fleeting_thoughts"

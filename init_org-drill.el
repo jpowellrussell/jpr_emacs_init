@@ -15,6 +15,7 @@
 ;;; Code:
 (use-package org-drill
   :straight t
+  :defer t
   :config
   ;;(setq org-drill-scope directory)
   (setq org-drill-use-visible-cloze-face-p t)

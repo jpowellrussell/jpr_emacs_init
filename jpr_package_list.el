@@ -42,58 +42,51 @@ Written by Xah, found at http://ergoemacs.org/emacs/organize_your_dot_emacs.html
 (defvar jpr-pkg-init-list '("init_exec-path-from-shell.el" ; for dependencies
                             "init_magit.el" ; for dependencies
                             "init_zenburn-theme.el" ; other packages rely on
-                                                    ; default colors from this.
-                                                    ; Also so I don't have to
-                                                    ; look at the default theme
-                                                    ; when a package doesn't
-                                                    ; load.
-                            ;;"init_all-the-icons.el"
-                            "init_awesome-tab.el" ;; this or tabbar, not both
+                            ;;                         ; default colors from this.
+                            ;;                         ; Also so I don't have to
+                            ;;                         ; look at the default theme
+                            ;;                         ; when a package doesn't
+                            ;;                         ; load.
+                            "init_awesome-tab.el"
                             "init_beacon.el"
 			    "init_better-defaults.el"
 			    "init_buffer-flip.el"
+                            "init_company.el"
                             "init_company-org-roam.el"
                             "init_dash.el"
-			    "init_deft.el"
+			    ;; "init_deft.el"
 			    "init_elfeed-org.el"
 			    "init_elfeed.el"
 			    "init_flycheck.el"
                             "init_font-lock+.el"
                             "init_fringe-current-line.el"
-			    "init_fuz.el"
-			    ;;"init_hc-zenburn-theme.el"
+			    ;"init_hc-zenburn-theme.el"
 			    "init_highlight-symbol.el"
                             "init_hydra.el"
-                            ;;"init_ido.el" ;; using Ivy instead
-                            ;;"init_ido-hacks.el"
-			    ;;"init_ido-vertical-mode.el"
                             "init_ivy.el"
                             "init_jedi.el"
-                            ;;"init_kaolin-themes.el"
+                            ;"init_kaolin-themes.el"
 			    "init_markdown-mode.el"
 			    "init_markdown-mode+.el"
 			    "init_markdownfmt.el"
-                            ;;"init_mode-icons.el" ;; Not sure if I like these,
-                            ;; so leaving disabled for now
 			    "init_mu4e.el"
                             "init_notdeft.el"
 			    "init_nov.el"
 			    "init_outlook.el"
-			    ;;"init_snails.el"
-			    ;;"init_org-brain.el"
+			    ;"init_snails.el"
+			    ;"init_org-brain.el"
 			    "init_org-bullets.el"
-			    "init_org-drill.el"
+			    ;"init_org-drill.el"
                             "init_org-fc.el"
-			    ;;"init_org-edna.el"
+			    ;"init_org-edna.el"
                             "init_org-journal.el"
                             "init_org-make-toc.el"
 			    "init_org-noter.el"
-			    ;;"init_org-page.el"
-                            ;;"init_org-protocol.el"
-			    ;;"init_org-protocol-capture-html.el"
-                            ;;"init_org-ref.el"
-                            "init_org-roam.el"
-                            "init_org-sidebar.el"
+			    ;"init_org-page.el"
+                            ;"init_org-protocol.el"
+			    ;"init_org-protocol-capture-html.el"
+                            ;"init_org-ref.el"
+                            "init_org-roam.el"; ah, big slowdown here, I'll take a look to see if it can be optimized a bit
                             "init_org-web-tools.el"
                             "init_ov.el"
                             "init_ov-highlight.el"
@@ -105,18 +98,11 @@ Written by Xah, found at http://ergoemacs.org/emacs/organize_your_dot_emacs.html
                             "init_s.el"
                             "init_slime.el"
                             "init_smart-mode-line.el"
-                            "init_smex.el"
-			    ;;"init_snails.el"
-                            ;;"init_tabbar.el" ;; this or awesome-tab, not both
-                            ;;"init_telephone-line.el"
-			    ;;"init_toc-org.el"
+			    ;"init_toc-org.el"
 			    "init_treemacs.el"
-                            ;; "init_wc-mode.el" ;; This guy is a resource hog,
-                            ;; slows down big org files a lot. Left here in case
-                            ;; I want to find another word count package
 			    "init_winum.el"
 			    "init_yasnippet.el"
-                            "init_elpy.el" ; placed at end due to dependencies
+                            "init_elpy.el" ; placed at end due to dependencies - slight slow down from this one, but not much
 		           )
       )
 

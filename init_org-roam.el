@@ -17,7 +17,8 @@
 (use-package org-roam
   :straight t
   :ensure t
-  :hook
+  :hook ;Loading at init slows down start up considerably, but it's important
+        ;enough to me to be worth it
   (after-init . org-roam-mode)
   :custom
   (org-roam-directory "~/dropbox/khs/")
@@ -47,7 +48,7 @@
   ;;                     (buffer-file-name)))
   ;;          nil)))))
   ;;  (setq org-roam-tag-sources '(prop last-directory hashtags))
-  
+
   (setq org-roam-buffer-position 'right)
   (setq org-roam-capture-templates
         '(

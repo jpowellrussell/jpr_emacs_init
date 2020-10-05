@@ -14,6 +14,7 @@
 ;;; Code:
 (use-package org-web-tools
   :straight t
+  :defer t
   )
 
 (provide 'init_org-web-tools)

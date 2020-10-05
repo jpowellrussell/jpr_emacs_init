@@ -17,6 +17,7 @@
 (use-package ov-highlight
   :straight (ov-highlight :type git :host github
                           :repo "jkitchin/ov-highlight")
+  :defer t
   :bind
   ("C-c C-H" . ov-highlight-read)
   :config

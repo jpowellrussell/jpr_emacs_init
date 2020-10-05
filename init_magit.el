@@ -15,6 +15,7 @@
 ;;; Code:
 (use-package magit
   :straight t
+  :defer t
   :bind (
          ("C-x g" . magit-status)
          )

@@ -18,6 +18,7 @@
 ;;; Code:
 (use-package org
   :straight t
+  :defer t
   :mode ("\\.org$" . org-mode)
   :hook (org-mode . flyspell-mode)
         ;(org-mode . variable-pitch-mode)

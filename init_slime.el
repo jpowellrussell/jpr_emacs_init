@@ -15,6 +15,7 @@
 (use-package slime
   :ensure t
   :straight t
+  :defer t
   :config
   (setq inferior-lisp-program "sbcl")
   )

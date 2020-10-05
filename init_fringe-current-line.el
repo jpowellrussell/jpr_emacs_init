@@ -10,6 +10,7 @@
 
 (use-package fringe-current-line
   :straight t
+  :defer t
   :config
   (global-fringe-current-line-mode 1)
   (defcustom fringe-current-line-indicator-bitmap

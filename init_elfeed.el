@@ -30,6 +30,7 @@
 (use-package elfeed
   :straight t
   :ensure t
+  :defer t
   :bind ("C-c n r" . elfeed) ;mnemonic: "news read"r
   :config (setq elfeed-feeds "~/.emacs.d/elfeed.org")
   )
@@ -44,6 +45,7 @@
 (use-package elfeed-goodies
   :straight t
   :ensure t
+  :defer t
   :config
   (my-elfeed-goodies-setup)
   (setq elfeed-goodies/entry-pane-position 'bottom)
@@ -52,6 +54,7 @@
 (use-package elfeed-score
   :straight t
   :ensure t
+  :defer t
   :config
    (setq elfeed-score-score-file "~/git/jpr_emacs_init/elfeed.score")
    (setq elfeed-search-print-entry-function #'elfeed-score-print-entry)

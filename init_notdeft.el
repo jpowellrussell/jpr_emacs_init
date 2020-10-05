@@ -17,6 +17,7 @@
 (use-package notdeft
   :straight
   (:type git :host github :repo "hasu/notdeft")
+  :defer t
   :hook
   (org-mode-local-variables-hook . default-notdeft-hook)
   (after-init-hook . notdeft-mode)
@@ -25,7 +26,7 @@
   :config
   (require 'notdeft-autoloads)
   (setq notdeft-directories '("~/dropbox/khs/"))
-  
+
   ;; Full path of "notdeft-xapian" executable.
   (let ((x
          (let ((default-directory
