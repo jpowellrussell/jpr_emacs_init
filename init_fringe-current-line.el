@@ -1,16 +1,20 @@
-;; =============================================================================
-;; Fringe Current Line Configuration
-;; =============================================================================
-;; Written by Jeff Russell
-;; Updated 2020-04-14
-;; jpowellrussell.com
-;; -----------------------------------------------------------------------------
+;;; init_fringe-current-line.el --- Bimap in fringe of line with point
 
-;; Package to put an indicator in the fringe next the line holding the point
+;; ==============================================================================
+;; Fringe Current Line Set Up
+;; ==============================================================================
+;; Written by Jeff Russell
+;; Updated: 2020-12-16 1109
+;; jpowellrussell.com
+;; ------------------------------------------------------------------------------
+
+;;; Commentary:
+;; Package that puts a bitmap in the fringe to show the currently used line.
+
+;;; Code:
 
 (use-package fringe-current-line
   :straight t
-  :defer t
   :config
   (global-fringe-current-line-mode 1)
   (defcustom fringe-current-line-indicator-bitmap
@@ -53,4 +57,6 @@
   (setq fcl-fringe-bitmap fringe-current-line-indicator-bitmap)
   )
 
-;; init_fringe-current-line.el ends here
+(provide 'init_fringe-current-line)
+
+;;; init_fringe-current-line.el ends here

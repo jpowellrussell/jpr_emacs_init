@@ -15,51 +15,195 @@
 
 ;;; Code:
 (use-package org-roam
-  :straight t
+  :straight (org-roam :type git :host github :repo "org-roam/org-roam" :branch "v2")
   :ensure t
   :hook ;Loading at init slows down start up considerably, but it's important
         ;enough to me to be worth it
-  (after-init . org-roam-mode)
+  (after-init . ivy-mode)
   :custom
-  (org-roam-directory "~/dropbox/khs/")
-  :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-graph-show))
-               :map org-mode-map
-               (("C-c n i" . org-roam-insert))
-               (("C-c n I" . org-roam-insert-immediate)))
+  (org-roam-directory (file-truename "~/dropbox/khs/"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n c" . org-roam-capture)
+                                        ;("C-c n g" . org-roam-graph) ;graph not supported by v2 yet
+         ("C-c n i" . org-roam-node-insert))
   :config
-  ;; Function to look for previously made tags in the format "#tag" and add them
-  ;; as roam tags. I don't know if it works and I'm a bit worried to test it,
-  ;; since I didn't really understand the code I mostly copied from org-roam.el,
-  ;; from the function org-roam--extract-tags-prop
+  ;; General Variables and Startup
+  ;; ===========================================================================
+  (org-roam-setup)
+  (setq completion-ignore-case t)
+  (setq org-roam-complete-everywhere nil)
+;;  (setq org-roam-link-auto-replace nil)
+;;  (setq org-roam-buffer-position 'right)
+;;  (setq org-roam-graph-viewer "")
 
-  ;; (defun org-roam--extract-tags-hashtags (_file)
-  ;;     "Extract '#tags' from files as org-roam tags"
-  ;;   (let* ((hashtags (cdr (assoc "#" (org-roam--extract-global-props '("#"))))))
-  ;;     (condition-case nil
-  ;;         (org-roam--str-to-list hashtags)
-  ;;       (error
-  ;;        (progn
-  ;;          (lwarn '(org-roam) :error
-  ;;                 "Failed to parse tags for buffer: %s. Skipping"
-  ;;                 (or org-roam-file-name
-  ;;                     (buffer-file-name)))
-  ;;          nil)))))
-  ;;  (setq org-roam-tag-sources '(prop last-directory hashtags))
+  ;; Org-Roam Protocol Setup
+  ;; ===========================================================================
+  (require 'org-roam-protocol)
 
-  (setq org-roam-buffer-position 'right)
+  ;; Custom Functions
+  ;; ===========================================================================
+
+  ;; The two below come from nobiot on the org-roam forum and are a way to make
+  ;; sure that no org-ids get "lost", such as from renaming a file or the like
+  (defun my-org-id-update-org-roam-files ()
+    "Update Org-ID locations for all Org-roam files."
+    (interactive)
+    (org-id-update-id-locations (org-roam--list-all-files)))
+
+  (defun my-org-id-update-id-current-file ()
+    "Scan the current buffer for Org-ID locations and update them."
+    (interactive)
+    (org-id-update-id-locations (list (buffer-file-name (current-buffer)))))
+
+  ;; Capture Setup
+  ;; ===========================================================================
+
+  ;; This function generates the name for a new slip in my slipbox to be used in
+  ;; the org-roam-capture template - This function is not necessary with "read-dir"
+  ;; (defun jpr-org-roam-slip-name ()
+  ;;   "Make a name for a new slip, including which slipbox it goes in, for org-roam-capture."
+    ;; (concat "Slipbox/" (jpr-slipbox-select) "/" (jpr-pick-slip-id)))
+
+  ;; Define some variables to use in capture templates, like directories
+  (setq org-roam-slipbox-dir "Slipbox")
+
+  ;; Define capture templates for org-roam (based on org-capture, but with some
+  ;; customization based on org-roam functions)
   (setq org-roam-capture-templates
-        '(
-          ("d" "default" plain (function org-roam--capture-get-point)
-          "%?"
-          :file-name "Roam_Notes/%<%Y%m%d%H%M%S>-${slug}"
-          :head "#+title: ${title}\n#+roam_alias: \n#+roam_tags: \n\n"
+        `(
+          ("b" "Book Slip" plain
+           "*Link to Book*:
+*Writers*:
+*Leaves*:
+*Looking Up*:
+[[file:../Roam_Notes/Tags/20210311132041-books.org][Books]]
+
+** Times Read
+mm/dd/yy - mm/dd/yy
+
+** Holding-On Askings
+*What was the core thesis of this book?*
+*How does this idea change my thinking about other ideas?*
+*How does knowing this influence my practical abilities?*
+
+** Kind of Book
+
+** Thoughts after Reading
+:PROPERTIES:
+:VISIBILITY: all
+:END:
+
+** Key Words and Thoughts
+
+** Things to Ankify
+
+** Outline
+:PROPERTIES:
+:VISIBILITY: all
+:END:
+
+*** Chapter Name
+/One to Two Sentence Rundown of Chapter./
+
+** Thorough Rundown
+
+** Worthwhile Askings
+
+** Sayings
+
+** Folks and Works Named
+
+** Thoughts
+:PROPERTIES:
+:VISIBILITY: all
+:END:
+
+"
+           :if-new (file+head "Slipbox/8-Books/${slug}.org"
+                              "#+title: ${title}\n\n#+PROPERTY: DATE %<%Y-%m-%d %H%M>\n#+STARTUP: overview\n\n")
+           :unnarrowed t)
+          ("d" "Default" plain "%?"
+           :if-new (file+head "Roam_Notes/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n\n")
+          :unnarrowed t)
+          ("e" "Engagement Report" plain
+           :if-new (file+head "%(concat org-roam-directory \"/Engagement_Reports/%<%Y-%m-%d>-${slug}.org\")" "#+title: %<%Y-%m-%d>-${title}\n#+roam_alias: \n\n")
+          "[[id:1EE2E69E-14DB-4835-8C81-5C9660A39CDE][Weekly Engagement Reports]]
+- %?"
+          :unnarrowed t)
+          ("f" "Fleeting Thought" plain "%?"
+           :if-new (file+head "%(concat org-roam-slipbox-dir \"/0-Fleeting_Thoughts/%<%Y%m%d%H%M%S>-${slug}.org\")"
+                              "#+title: ${title}\n\n")
+          :unnarrowed t)
+          ("p" "Person" plain
+          "*Name*: ${title}\n*About*: %?"
+          :if-new (file+head "Roam_Notes/Folks/%<%Y%m%d%H%M%S>-${slug}.org"
+                             "#+title: ${title}\n#+roam_alias: \n\n")
+          :unnarrowed t)
+          ;; with new file-level property drawers, I like need to change the template below to put things like Slip_ID in the property drawer rather than as '#+PROPERTY'
+          ("s" "Slip" plain
+           "** Body
+   :PROPERTIES:
+   :VISIBILITY: all
+   :END:
+%i%?
+
+** Where From
+   :PROPERTIES:
+   :VISIBILITY: folded
+   :END:
+
+** Links
+   :PROPERTIES:
+   :VISIBILITY: folded
+   :END:
+
+** Tags
+   :PROPERTIES:
+   :VISIBILITY: folded
+   :END:
+
+"
+           :if-new (file+head "%(read-directory-name \"path: \" (concat org-roam-directory org-roam-slipbox-dir))${slug}.org"
+                              "#+title: ${title}\n\n#+PROPERTY: Slip_ID %(and (string-match \"^[a-z][a-z0-9]+\" \"${title}\")
+(match-string 0 \"${title}\"))\n#+PROPERTY: Firstness 50\n#+PROPERTY: DATE %<%Y-%m-%d %H%M>\n#+STARTUP: overview\n\n")
+           ;"%(jpr-org-roam-slip-name)-${slug}"; the way you put functions into this keyword is to put a '%' before the opening parenthesis, enclosed within a string
+           :unnarrowed t)
+          ("t" "Tag" plain
+          "This is a slip to hold backlinks that have to do with ${title}. %?"
+          :if-new (file+head "Roam_Notes/Tags/%<%Y%m%d%H%M%S>-${slug}.org"
+                             "#+title: ${title}\n#+roam_alias: \n\n")
+          :unnarrowed t)
+          ("u" "Undertaking" plain "%?"
+           :if-new (file+head "Undertakings/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n\n")
           :unnarrowed t)
           )
-        )
+       )
   )
+
+;; Org-Roam-Server Setup
+;; ===========================================================================
+;; Commented out for now, as v2 of org-roam does not yet work with server
+
+;; (use-package org-roam-server
+;;   :ensure t
+;;   :straight t
+;;   :config
+;;   (setq org-roam-server-host "127.0.0.1"
+;;         org-roam-server-port 8080
+;;         org-roam-server-authenticate nil
+;;         org-roam-server-export-inline-images t
+;;         org-roam-server-serve-files nil
+;;         org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+;;         org-roam-server-network-poll t
+;;         org-roam-server-network-arrows nil
+;;         org-roam-server-network-label-truncate t
+;;         org-roam-server-network-label-truncate-length 60
+;;         org-roam-server-network-label-wrap-length 20
+;;         org-roam-server-network-vis-options nil ;This option stops the nodes from "dancing", which can be distracting and make it hard to click on nodes (json-encode (list (cons 'physics (list (cons 'enabled json-false)))))
+;;         ))
 
 (provide 'init_org-roam)
 

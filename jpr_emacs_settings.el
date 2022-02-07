@@ -25,12 +25,12 @@
 ;; want to keep them. So far, so good.
 
 ;; My preferred fixed-width font
-(set-frame-font "Inconsolata-12")
+(set-frame-font "Inconsolata-14")
 
 ;; My preferred variable-pitch font
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "ETBembo" :height 140))))
+ '(variable-pitch ((t (:family "ETBembo" :height 160))))
  '(fixed-pitch ((t (:family "Inconsolata" :height 100))))
  )
 
@@ -67,6 +67,10 @@
 
 ;; I removed the scroll bars to get more screen real estate
 (scroll-bar-mode -1)
+
+;; Enable Flyspell in text buffers
+(add-hook 'text-mode-hook
+          (lambda () (flyspell-mode 1)))
 
 ;; If you typing or pasting over a selection, deletes the highlighted text,
 ;; making it behave more as expected from previous text-editor experience
@@ -125,7 +129,6 @@
       backup-by-copying t               ; don't clobber symlinks
       version-control t                 ; version numbers for backup files
       delete-old-versions t             ; delete excess backup files silently
-      delete-by-moving-to-trash t
       kept-old-versions 6               ; oldest versions to keep when a new numbered backup is made (default: 2)
       kept-new-versions 9               ; newest versions to keep when a new numbered backup is made (default: 2)
       auto-save-default t               ; auto-save every buffer that visits a file
@@ -196,6 +199,180 @@
 
 ;; Key Binding for Above
 (define-key global-map (kbd "C-M-q") 'unfill-region)
+
+;; Function to make selected region sentence case, which I am frankly surprised
+;; is not a default Emacs command
+;; By Xah, found here: http://ergoemacs.org/emacs/emacs_upcase_sentence.html
+(defun xah-upcase-sentence ()
+  "Upcase first letters of sentences of current text block or selection.
+
+URL `http://ergoemacs.org/emacs/emacs_upcase_sentence.html'
+Version 2020-11-30"
+  (interactive)
+  (let ($p1 $p2)
+    (if (use-region-p)
+        (setq $p1 (region-beginning) $p2 (region-end))
+      (save-excursion
+        (if (re-search-backward "\n[ \t]*\n" nil "move")
+            (progn
+              (setq $p1 (point))
+              (re-search-forward "\n[ \t]*\n"))
+          (setq $p1 (point)))
+        (progn
+          (re-search-forward "\n[ \t]*\n" nil "move")
+          (setq $p2 (point)))))
+    (save-excursion
+      (save-restriction
+        (narrow-to-region $p1 $p2)
+        (let ((case-fold-search nil))
+          ;; after period or question mark or exclamation
+          (goto-char (point-min))
+          (while (re-search-forward "\\(\\.\\|\\?\\|!\\)[ \n]+ *\\([a-z]\\)" nil "move")
+            (upcase-region (match-beginning 2) (match-end 2))
+            (overlay-put (make-overlay (match-beginning 2) (match-end 2)) 'face 'highlight))
+          ;; after a blank line, after a bullet, or beginning of buffer
+          (goto-char (point-min))
+          (while (re-search-forward "\\(\\`\\|• \\|\n\n\\)\\([a-z]\\)" nil "move")
+            (upcase-region (match-beginning 2) (match-end 2))
+            (overlay-put (make-overlay (match-beginning 2) (match-end 2)) 'face 'highlight))
+          ;; for HTML. first letter after tag
+          (goto-char (point-min))
+          (while (re-search-forward "\\(<h[1-6]>[ \n]?\\|<p>[ \n]?\\|<li>\\|<dd>\\|<td>[ \n]?\\|<figcaption>[ \n]?\\)\\([a-z]\\)" nil "move")
+            (upcase-region (match-beginning 2) (match-end 2))
+            (overlay-put (make-overlay (match-beginning 2) (match-end 2)) 'face 'highlight))
+          (goto-char (point-min)))))))
+
+;; Xah's function above assumes all lower case, whereas currently my use-case
+;; (fixing some weird formatting from going from rich text to markdown to org,
+;; includes lots of all caps I want to fix) is to work with sentences that may
+;; or may not already be lower case, so I've written a simple function to
+;; combine downcase-region and xah-upcase-sentence.
+(defun jpr-sentence-case ()
+  "Convert region to 'sentence case', even if curently uppercase.
+
+Relies on xah-upcase-sentence, found here: http://ergoemacs.org/emacs/emacs_upcase_sentence.html"
+  (interactive)
+  (progn
+    (let ($p1 $p2)
+      (if (use-region-p)
+          (setq $p1 (region-beginning) $p2 (region-end))
+        (save-excursion
+          (if (re-search-backward "\n[ \t]*\n" nil "move")
+              (progn
+                (setq $p1 (point))
+                (re-search-forward "\n[ \t]*\n"))
+            (setq $p1 (point)))
+          (progn
+            (re-search-forward "\n[ \t]*\n" nil "move")
+            (setq $p2 (point)))))
+      (save-excursion
+        (save-restriction
+          (narrow-to-region $p1 $p2)
+          (downcase-region $p1 $p2))))
+    ;; Below is a copy of xah-upcase-sentence above, because I could not figure
+    ;; out a clean way to just call that function and make it work like I wanted
+    (let ($p1 $p2)
+      (if (use-region-p)
+          (setq $p1 (region-beginning) $p2 (region-end))
+        (save-excursion
+          (if (re-search-backward "\n[ \t]*\n" nil "move")
+              (progn
+                (setq $p1 (point))
+                (re-search-forward "\n[ \t]*\n"))
+            (setq $p1 (point)))
+          (progn
+            (re-search-forward "\n[ \t]*\n" nil "move")
+            (setq $p2 (point)))))
+      (save-excursion
+        (save-restriction
+          (narrow-to-region $p1 $p2)
+          (let ((case-fold-search nil))
+            ;; after period or question mark or exclamation
+            (goto-char (point-min))
+            (while (re-search-forward "\\(\\.\\|\\?\\|!\\)[ \n]+ *\\([a-z]\\)" nil "move")
+              (upcase-region (match-beginning 2) (match-end 2))
+              (overlay-put (make-overlay (match-beginning 2) (match-end 2)) 'face 'highlight))
+            ;; after a blank line, after a bullet, or beginning of buffer
+            (goto-char (point-min))
+            (while (re-search-forward "\\(\\`\\|• \\|\n\n\\)\\([a-z]\\)" nil "move")
+              (upcase-region (match-beginning 2) (match-end 2))
+              (overlay-put (make-overlay (match-beginning 2) (match-end 2)) 'face 'highlight))
+            ;; for HTML. first letter after tag
+            (goto-char (point-min))
+            (while (re-search-forward "\\(<h[1-6]>[ \n]?\\|<p>[ \n]?\\|<li>\\|<dd>\\|<td>[ \n]?\\|<figcaption>[ \n]?\\)\\([a-z]\\)" nil "move")
+              (upcase-region (match-beginning 2) (match-end 2))
+              (overlay-put (make-overlay (match-beginning 2) (match-end 2)) 'face 'highlight))
+            (goto-char (point-min))))))))
+
+;; Keybinding for above
+(define-key global-map (kbd "C-c s c") 'jpr-sentence-case)
+
+;; Function to convert contents of former tables into org-formatted tables in my Fellhold rules. There are enough of them that it was worth writing something instead of doing by hand, and rather than leaving it in scratch, this lets me learn from what I wrote.
+
+(defun jpr-make-table ()
+  "Take contents of tables originally formatted in RTF and make into org tables.
+
+I created my Fellhold rules in Evernote originally, then imported them to Devonthink, and later converted them to Markdown, and then into org. So some of the finer bits (like tables) got screwed up. Luckily they got screwed up in a consistent way, so this function ought to let me highlight the contents of a former table and turn them into an org-formatted table."
+  (interactive)
+  (let ($p1 $p2)
+    (if (use-region-p)
+        (setq $p1 (region-beginning) $p2 (region-end))
+      (progn
+        (message "Please select a region")
+        (return nil)))
+    (save-excursion
+      (save-restriction
+        (narrow-to-region $p1 $p2)
+        ;; defines a line to work with - I might need to put this in a while loop for as long as it finds valid lines
+        (let ($l1 $l2)
+          (goto-char (point-min))
+          (setq $l1 (point-min))
+          (setq $l2 (regex search for newline followed by number)))
+        (save-restriction
+          (narrow-to-region $l1 $l2)
+          (while (re-search-forward "regexp for finding double new lines" nil "move")
+            ;; Logic for finding a line: start a current point, search until newline followed by a digit
+            ;; Logic for splitting line: find every double newline in "line" and replace wtih a comma
+            (do something to put commas in)))
+        (org-table-create-or-convert-from-region $p1 $p2)
+        ;; thoughts on how to do this: return to point min, search for newline, insert '|-' followed by a newline
+        (define header row)))))
+
+;; I have been using "Better OneTab" for a while to manage my tabs, but I
+;; recently (May 2021) discovered a new tool called "BrainTool" -
+;; https://braintool.org/ . BrainTool allows you to import an org file to define
+;; your links and notes, whereas Better OneTab exports your tab groups in a json
+;; format. Note that for this to function, the Better OneTab export must be
+;; modified to place the default top-level array inside an object and to give
+;; the array the label "groups", and any URLs that have a percentage sign will
+;; need to have those replaced by a double percentage sign '%%' so that the
+;; format function works properly. I don't anticipate needing to use this again,
+;; but I wanted to keep it here because I kept smashing my head against how to
+;; read a json properly. Some of my confusion was just getting the syntax of
+;; dolist wrong (I didn't enclose the arguments in a list at first), but it also
+;; seems like you can't just read an array out as a list and use it, it seems to
+;; default to making the top level an object, which by default is a hash table.
+;; Once I put the array I wanted to work with inside an object and gave it a
+;; label that I could access with 'get hash', everything worked fine.
+
+(defun jpr-betteronetab-to-org (in-file out-file)
+  "Convert a BetterOneTab json export to an Org file suitable to BrainTool.
+IN-FILE should be a Better OneTab JSON export modified to have a top-level
+object and with the array of tab groups named 'groups'. OUT-FILE should be an
+org file."
+(let* ((json-object-type 'hash-table)
+       (json-array-type 'list)
+       (json-key-type 'string)
+       (json (json-read-file in-file))
+       (groups (gethash "groups" json)))
+  (with-temp-file out-file
+      (dolist (group groups)
+        (let ((group-title (gethash "title" group)))
+          (insert (format "** %s\n" group-title)))
+        (dolist (tab (gethash "tabs" group))
+          (let ((url (gethash "url" tab))
+                (link-title (gethash "title" tab)))
+            (insert (format "*** [[%s][%s]]\n" url link-title))))))))
 
 ;; =============================================================================
 ;; Emacs4developers recommended configuration

@@ -9,7 +9,9 @@
 ;; -----------------------------------------------------------------------------
 
 ;;; Commentary:
-;; Tool built on top of Ido to allow smart completion for M-x
+;; Tool built on top of Ido to allow smart completion for M-x. Works with Ivy as
+;; well, as I discovered when I removed it from my init list and M-x began
+;; acting dumber than I was used to.
 
 ;;; Code:
 (use-package smex

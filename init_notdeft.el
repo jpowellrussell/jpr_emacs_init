@@ -23,9 +23,11 @@
   (after-init-hook . notdeft-mode)
   :bind
   ("C-c n d" . notdeft)
+  :init
+  (setq notdeft-allow-org-property-drawers t)
   :config
   (require 'notdeft-autoloads)
-  (setq notdeft-directories '("~/dropbox/khs/"))
+  (setq notdeft-directories '("~/dropbox/khs/slipbox/"))
 
   ;; Full path of "notdeft-xapian" executable.
   (let ((x

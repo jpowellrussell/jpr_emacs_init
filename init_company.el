@@ -14,10 +14,14 @@
 ;;; Code:
 (use-package company
   :straight t
-  :hook (after-init-hook . global-company-mode)
+  :init
+  (add-hook 'after-init-hook 'global-company-mode)
+  :bind (:map company-active-map
+              ("M-n" . company-select-next)
+              ("M-p" . company-select-previous))
   :config
   (setq company-idle-delay 0
-        company-minimum-prefix-length 0)
+        company-minimum-prefix-length 2)
   (push 'company-capf company-backends)
   )
 

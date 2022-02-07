@@ -30,9 +30,38 @@
 (use-package elfeed
   :straight t
   :ensure t
-  :defer t
-  :bind ("C-c n r" . elfeed) ;mnemonic: "news read"r
-  :config (setq elfeed-feeds "~/.emacs.d/elfeed.org")
+  :bind ("C-c n r" . elfeed) ;mnemonic: "news read"
+  :config
+  (setq elfeed-feeds "~/.emacs.d/elfeed.org")
+  (add-hook 'elfeed-new-entry-hook
+            (elfeed-make-tagger :feed-url "marginalrevolution"
+                                :before "6 months ago"
+                                :remove 'unread
+                                :add 'old))
+  (add-hook 'elfeed-new-entry-hook
+            (elfeed-make-tagger :feed-title "twitter"
+                                :before "3 months ago"
+                                :remove 'unread
+                                :add 'old))
+  (add-hook 'elfeed-new-entry-hook
+            (elfeed-make-tagger :feed-url "reddit\\.com"
+                                :before "4 months ago"
+                                :remove 'unread
+                                :add 'old))
+  (add-hook 'elfeed-new-entry-hook
+            (elfeed-make-tagger :entry-title "Ansi Common Lisp"
+                                :remove 'unread
+                                :add 'old))
+  (setq-default elfeed-search-filter "+unread")
+  (setq elfeed-log-level 'debug)
+  )
+
+;; Allows for managing elfeed feeds in an org file, making organization and
+;; tagging simpler
+
+(use-package elfeed-org
+  :straight t
+  :config (elfeed-org)
   )
 
 ;; Note that it's important to load elfeed goodies first, apparently. When I had
@@ -45,7 +74,7 @@
 (use-package elfeed-goodies
   :straight t
   :ensure t
-  :defer t
+  :after (elfeed)
   :config
   (my-elfeed-goodies-setup)
   (setq elfeed-goodies/entry-pane-position 'bottom)
@@ -54,13 +83,15 @@
 (use-package elfeed-score
   :straight t
   :ensure t
-  :defer t
+  :after (elfeed elfeed-goodies)
   :config
    (setq elfeed-score-score-file "~/git/jpr_emacs_init/elfeed.score")
    (setq elfeed-search-print-entry-function #'elfeed-score-print-entry)
-  (progn
-    (elfeed-score-enable)
-    (define-key elfeed-search-mode-map "=" elfeed-score-map))
+   (setq elfeed-score-log-level 'debug)
+   (setq elfeed-score-log-debug t)
+   (progn
+     (elfeed-score-enable)
+     (define-key elfeed-search-mode-map "=" elfeed-score-map))
   )
 
 (provide 'init_elfeed)
