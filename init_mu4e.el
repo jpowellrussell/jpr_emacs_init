@@ -14,10 +14,6 @@
 
 ;;; Code:
 
-;; I am not sure if you can properly use use-package with mu/mu4e, but all the
-;; examples I found did not use it, so I'm configuring it based on the way they
-;; did it.
-
 ;; Make sure emacs can find the mu4e package files.
 (add-to-list 'load-path "/usr/local/Cellar/mu/1.4.13/share/emacs/site-lisp/mu/mu4e")
 (use-package mu4e
@@ -70,6 +66,19 @@
   ;; Don't include self on cc list when composing a message
   (setq mu4e-compose-keep-self-cc nil)
 
+  ;; "Flow" lines and don't insert hard line breaks so that my emails don't look
+  ;; weird to non-plain-text email users (meaning just about everyone else)
+  (setq mu4e-compose-format-flowed t)
+  (add-hook 'mu4e-compose-mode-hook (lambda () (use-hard-newlines -1)))
+
+  ;; Don't auto-include a signature, as it's behavior with gmail and outlook
+  ;; quoting conventions is not what I want when replying (it puts it after all
+  ;; quoted text, and Emacs appears to have a hard enough preference for
+  ;; old-school in-line replies that it won't let you put a signature before
+  ;; quoted text)
+
+  (setq mu4e-compose-signature-auto-include nil)
+
   ;; Set the default policy for which context to use
   (setq mu4e-context-policy 'pick-first)
 
@@ -90,7 +99,7 @@
   (setq mu4e-headers-include-related t)
 
   ;; Try out the new Gnus Article view-based message view
-  ;;(setq mu4e-view-use-gnus t)
+  (setq mu4e-view-use-gnus t)
 
   ;; Show addresses rather than only names
   (setq mu4e-view-show-addresses t)

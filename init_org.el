@@ -23,8 +23,8 @@
   :hook (org-mode . flyspell-mode)
         ;(org-mode . variable-pitch-mode)
         (org-mode . (lambda ()
-                      (setq-local yas/trigger-key [tab])
-                      (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand)))
+                      (setq-local yas-trigger-key [tab])
+                      (define-key yas/keymap [tab] 'yas-next-field-or-maybe-expand)))
   :bind
   (
       ("C-c 1" . org-store-link)
@@ -38,6 +38,9 @@
   ;; Enable Org-Protocol for interaction with other programs - I'm still sorting
   ;; out the kinks here
   (require 'org-protocol)
+
+  ;; Enable org-tempo to allow some org-native snippets like structure templates
+  (require 'org-tempo)
 
   ;; Enable Org-Element for parsing org files
   (require 'org-element)
@@ -80,7 +83,7 @@
      `(org-level-1 ((t (,@headline :font "ETBEMBO" :height 1.75))))
      `(org-document-title ((t (,@headline :font "ETBEMBO" :height 2.0 :underline nil))))
      )
-    )
+   )
 
   ;; Use a tree buffer and a view buffer, similar to programs like Scrivener,
   ;; Devonthink, and Evernote. From Vim Valley here:
@@ -91,8 +94,16 @@
     (org-tree-to-indirect-buffer)
     (windmove-right))
 
+  ;; Customize Plain List Bullet Demotion Scheme
+  (setq org-list-demote-modify-bullet
+        '(("+" . "-") ("-" . "*") ("*" . "-")))
+
   ;; Indent content with bullets
   (setq org-startup-indented t)
+
+  ;; By setting the default to "folded", files respect my by-headline visibility
+  ;; properties
+  ;; (setq org-startup-folded "fold")
 
   ;; Navigation Customizations
   (setq org-return-follows-link t)
@@ -141,6 +152,43 @@
   ;; looks for this and inserts an individual TODO under it
   (defconst *my-todo-headline-format* "Daily Forethought")
 
+  ;; This function should allow me to choose a slipbox name to use when I capture
+  (defun jpr-slipbox-select ()
+    "Select which slipbox in which to file a slip created with org-roam-capture."
+    (interactive)
+    (let ((choices '("0-Fleeting_Thoughts" "1-Main" "2-Fellhold" "3-Runes" "4-Slush" "5-Games" "6-Dreams" "7-Story_Toolbox")))
+      (let ((slipbox (completing-read "Slipbox Name: " choices)))
+        (format "%s" slipbox))))
+
+  ;; This function should allow me to write out a Slip ID to incorporate into the filename
+  (defun jpr-pick-slip-id ()
+    "Write out a slip ID for a newly created slip."
+    (interactive)
+    (let ((slip-id (read-string "Slip ID: ")))
+      (format "%s" slip-id)))
+
+  ;; Function for user to enter a new file name for a capture template.
+  (defun jpr-capture-name ()
+    "Enter a name for a newly created file using an org-capture template."
+    (interactive)
+    (let ((file-name (read-string "File name: ")))
+      (format "%s.org" file-name)))
+
+  ;; Function to generate file name for "TODO" org-capture template. I created
+  ;; this and the next function when I realized that embedding these functions
+  ;; inside the template was getting them evaluated at compile time, rather than
+  ;; at capture time. I might have been able to fix this with better
+  ;; quoting/back-quoting, but this seemed like a cleaner way overall anyhow.
+
+  (defun jpr-todo-file-name ()
+    "Make a filename for my 'TODO' org-capture template."
+    (concat *my-khs-dir* *my-journal-dir* (format-time-string *todays-journal-file*)))
+
+  ;; Function to generate file name for "Slip" org-capture template
+  (defun jpr-slip-file-name ()
+    "Make a filename for my 'Slip' org-capture template."
+    (concat *my-slipbox-dir* (jpr-slipbox-select) "/" (jpr-pick-slip-id) "-" (jpr-capture-name)))
+
   (setq org-capture-templates
         `(
           ;; The two below will likely get built out as org-roam capture
@@ -158,16 +206,37 @@
           ;;  )
           ("t" "TODO"
            entry
-           (file+headline ,(concat *my-khs-dir* *my-journal-dir* (format-time-string *todays-journal-file*)) "Daily Forethought")
+           (file+headline jpr-todo-file-name "Daily Forethought")
            "* TODO %?\n%a\n"
            )
-          )
-   )
+;;           ("s" "Slip" plain (file jpr-slip-file-name) "** Body
+;;    :PROPERTIES:
+;;    :VISIBILITY: all
+;;    :END:
+;;    %i%?
+
+;; ** Where From
+;;    :PROPERTIES:
+;;    :VISIBILITY: folded
+;;    :END:
+
+;; ** Links
+;;    :PROPERTIES:
+;;    :VISIBILITY: folded
+;;    :END:
+
+;; ** Tags
+;;    :PROPERTIES:
+;;    :VISIBILITY: folded
+;;    :END:
+
+;; ")
+          ))
 
   ;; Tag Customizations
   ;; ----------------------------------------
   ;; Set up custom tags to added easily with the "insert tags" command
-  (setq org-tag-alist '(("drill" . ?d)))
+;;  (setq org-tag-alist '(("drill" . ?d)))
 
   ;; Below is sample code for defining global tags, including mutually exclusive tags
   ;; between the dummy tags "startgroup" and "endgroup". Disabled until I figure

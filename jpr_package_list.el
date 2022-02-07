@@ -47,15 +47,16 @@ Written by Xah, found at http://ergoemacs.org/emacs/organize_your_dot_emacs.html
                             ;;                         ; look at the default theme
                             ;;                         ; when a package doesn't
                             ;;                         ; load.
+                            "init_anki-editor.el"
+                            "init_avy.el"
                             "init_awesome-tab.el"
                             "init_beacon.el"
 			    "init_better-defaults.el"
 			    "init_buffer-flip.el"
-                            "init_company.el"
-                            "init_company-org-roam.el"
+                            ;"init_company.el" ; disabled until I can work out a finer-grained initialization and/or backend, as right now it pops up on normal writing way more than I want
                             "init_dash.el"
 			    ;; "init_deft.el"
-			    "init_elfeed-org.el"
+                            "init_dired.el"
 			    "init_elfeed.el"
 			    "init_flycheck.el"
                             "init_font-lock+.el"
@@ -71,25 +72,27 @@ Written by Xah, found at http://ergoemacs.org/emacs/organize_your_dot_emacs.html
 			    "init_markdownfmt.el"
 			    "init_mu4e.el"
                             "init_notdeft.el"
+                            "init_numerologizer.el"
 			    "init_nov.el"
 			    "init_outlook.el"
 			    ;"init_snails.el"
 			    ;"init_org-brain.el"
-			    "init_org-bullets.el"
+			    "init_org-bullets.el"; turned off to test org visibility issue
 			    ;"init_org-drill.el"
-                            "init_org-fc.el"
+                            "init_org-fc.el"; turned off to test org visibility issue
 			    ;"init_org-edna.el"
-                            "init_org-journal.el"
-                            "init_org-make-toc.el"
-			    "init_org-noter.el"
+                            "init_org-journal.el"; turned off to test org visibility issue
+                            "init_org-make-toc.el"; turned off to test org visibility issue
+			    "init_org-noter.el"; turned off to test org visibility issue
 			    ;"init_org-page.el"
                             ;"init_org-protocol.el"
 			    ;"init_org-protocol-capture-html.el"
                             ;"init_org-ref.el"
-                            "init_org-roam.el"; ah, big slowdown here, I'll take a look to see if it can be optimized a bit
-                            "init_org-web-tools.el"
+                            "init_org-roam.el"
+                            "init_org-web-tools.el"; turned off to test org visibility issue
                             "init_ov.el"
                             "init_ov-highlight.el"
+                            "init_pandoc-mode.el"
 			    "init_pdf-tools.el"
                             "init_pdf-tools-org.el"
 			    "init_pdf-view-restore.el"
@@ -98,6 +101,7 @@ Written by Xah, found at http://ergoemacs.org/emacs/organize_your_dot_emacs.html
                             "init_s.el"
                             "init_slime.el"
                             "init_smart-mode-line.el"
+                            "init_smex.el"
 			    ;"init_toc-org.el"
 			    "init_treemacs.el"
 			    "init_winum.el"
@@ -116,7 +120,7 @@ Written by Xah, found at http://ergoemacs.org/emacs/organize_your_dot_emacs.html
     (dolist (element list)
       (load (xah-get-fullpath element))))
 
-;; Use a dolist macro to run load on each package from the list above
+;; ;; Use a dolist macro to run load on each package from the list above
 (jpr-load-list jpr-pkg-init-list)
 
 (provide 'jpr_package_list)

@@ -26,40 +26,40 @@
   (require 'org-fc-hydra)
   (require 'org-fc-keymap-hint)
 
-  (defun org-fc-type-increading-init ()
-    "Mark headline as card of increading type."
-    (interactive)
-    (org-fc--init-card "increading")
-    (org-fc-review-data-update '("front")))
+  ;; (defun org-fc-type-increading-init ()
+  ;;   "Mark headline as card of increading type."
+  ;;   (interactive)
+  ;;   (org-fc--init-card "increading")
+  ;;   (org-fc-review-data-update '("front")))
 
-  (defvar org-fc-type-increading--hidden '())
+  ;; (defvar org-fc-type-increading--hidden '())
 
-  (defun org-fc-type-increading-setup (_position)
-    "Prepare an increading card for review."
-    (interactive)
-    (if (org-fc-has-back-heading-p)
-        (progn
-          (org-show-subtree)
-          (setq org-fc-type-increading--hidden (org-fc-hide-subheading "Back")))
-      (setq org-fc-type-increading--hidden nil)
-      (org-flag subtree t)))
+  ;; (defun org-fc-type-increading-setup (_position)
+  ;;   "Prepare an increading card for review."
+  ;;   (interactive)
+  ;;   (if (org-fc-has-back-heading-p)
+  ;;       (progn
+  ;;         (org-show-subtree)
+  ;;         (setq org-fc-type-increading--hidden (org-fc-hide-subheading "Back")))
+  ;;     (setq org-fc-type-increading--hidden nil)
+  ;;     (org-flag-subtree t)))
 
-  (defun org-fc-type-increading-flip ()
-    "'Flip' an Increading Card. There is not actually a flip."
-    (interactive)
-    (org-show-subtree)
-    (save-excursion
-      (dolist (pos org-fc-type-increading--hidden)
-        (goto-char pos)
-        (org-show-subtree)))
-    (org-fc-with-point-at-back-heading
-     (org-fc-show-latex)))
+  ;; (defun org-fc-type-increading-flip ()
+  ;;   "'Flip' an Increading Card. There is not actually a flip."
+  ;;   (interactive)
+  ;;   (org-show-subtree)
+  ;;   (save-excursion
+  ;;     (dolist (pos org-fc-type-increading--hidden)
+  ;;       (goto-char pos)
+  ;;       (org-show-subtree)))
+  ;;   (org-fc-with-point-at-back-heading
+  ;;    (org-fc-show-latex)))
 
-  (org-fc-register-type
-   'increading
-   'org-fc-type-increading-setup
-   'org-fc-type-increading-flip
-   'org-fc-noop)
+  ;; (org-fc-register-type
+  ;;  'increading
+  ;;  'org-fc-type-increading-setup
+  ;;  'org-fc-type-increading-flip
+  ;;  'org-fc-noop)
   )
 
 (provide 'init_org-fc)
