@@ -68,10 +68,6 @@
 ;; I removed the scroll bars to get more screen real estate
 (scroll-bar-mode -1)
 
-;; Enable Flyspell in text buffers
-(add-hook 'text-mode-hook
-          (lambda () (flyspell-mode 1)))
-
 ;; If you typing or pasting over a selection, deletes the highlighted text,
 ;; making it behave more as expected from previous text-editor experience
 (delete-selection-mode t)
@@ -83,20 +79,6 @@
 
 ;; Allows minibuffer commands while in the minibuffer
 (setq enable-recursive-minibuffers t)
-
-;; Configure spellchecker using GNU Aspell, which apparently has good support
-;; for personal libraries, which will be helpful when I work out my etymology
-;; checker tool
-(defmacro WhenMacOS (&rest body)
-  "Check if running on MacOS, if true, run BODY."
-  `(if (eq system-type 'darwin)
-       (progn ,@body)
-     nil
-     )
-  )
-(WhenMacOS
- (setq-default ispell-program-name "aspell")
- )
 
 ;; Save content copied outside of emacs to the kill ring
 (setq save-interprogram-paste-before-kill t)
@@ -161,6 +143,9 @@
 (setq auth-source-debug t
       auth-source-do-cache nil)
 
+;;Turn of cl deprecation warning during startup.
+(setq byte-compile-warnings '(cl-functions))
+
 ;; =============================================================================
 ;; Custom utility functions
 ;; =============================================================================
@@ -174,7 +159,7 @@
   (interactive)
   (comment-or-uncomment-region (line-beginning-position)
                                (line-end-position)))
-(global-set-key (kbd "C-;") 'toggle-comment-on-line)
+;; (global-set-key (kbd "C-;") 'toggle-comment-on-line)
 
 ;; Delete leading whitespace on a line, from here:
 ;;https://www.emacswiki.org/emacs/DeletingWhitespace

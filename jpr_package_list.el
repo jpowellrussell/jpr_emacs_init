@@ -59,6 +59,7 @@ Written by Xah, found at http://ergoemacs.org/emacs/organize_your_dot_emacs.html
                             "init_dired.el"
 			    "init_elfeed.el"
 			    "init_flycheck.el"
+                            "init_flyspell.el"
                             "init_font-lock+.el"
                             "init_fringe-current-line.el"
 			    ;"init_hc-zenburn-theme.el"

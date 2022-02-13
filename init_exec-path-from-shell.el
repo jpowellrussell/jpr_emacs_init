@@ -18,11 +18,11 @@
 ;;; Code:
 (use-package exec-path-from-shell
   :straight t
+  :if (memq window-system '(mac ns))
+  :demand
   :init
-  (exec-path-from-shell-copy-env "PYTHONPATH")
   :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-initialize))
 
 (provide 'init_exec-path-from-shell)
 
