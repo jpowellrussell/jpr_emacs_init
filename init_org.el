@@ -19,6 +19,7 @@
 (use-package org
   :straight t
   :defer t
+  :ensure org-plus-contrib
   :mode ("\\.org$" . org-mode)
   :hook (org-mode . flyspell-mode)
         ;(org-mode . variable-pitch-mode)
@@ -30,7 +31,8 @@
       ("C-c 1" . org-store-link)
       ("C-c a" . org-agenda)
       ("C-c c" . org-capture)
-      ("S-RET" . org-tree-open-in-right-frame))
+      ("S-RET" . org-tree-open-in-right-frame)
+      ("C-c p b" . jpr-webstead-publish))
   :config
 
   ;; Libraries to Require
@@ -44,6 +46,12 @@
 
   ;; Enable Org-Element for parsing org files
   (require 'org-element)
+
+  ;; Enable org-publishing
+  (require 'ox-publish)
+
+  ;; Enable RSS backend for org-publish
+  (use-package ox-rss)
 
   ;; Adjust settings so that markup works over multiple lines
   (setcar (nthcdr 4 org-emphasis-regexp-components) 100)
@@ -94,6 +102,9 @@
     (org-tree-to-indirect-buffer)
     (windmove-right))
 
+  ;; Enable Letters in Plain Lists (such as "a. b. c.")
+  (setq org-list-allow-alphabetical t)
+
   ;; Customize Plain List Bullet Demotion Scheme
   (setq org-list-demote-modify-bullet
         '(("+" . "-") ("-" . "*") ("*" . "-")))
@@ -112,6 +123,76 @@
   ;; ----------------------------------------
   ;; (setq org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "WAITING"
   ;;                                             "DONE")))
+
+  ;; Org-Publish Customizations
+  ;; ----------------------------------------
+  ;; Setting up org-publish for publishing org files to other formats. My
+  ;; initial use is to write my webstead in org and publish it as html to the
+  ;; folder I sync with my github for posting it online.
+
+  ;; The Publish Project Alist
+  (setq org-publish-project-alist
+        '(
+          ("webstead-notes"
+           :base-directory "~/dropbox/khs/undertakings/org_webstead"
+           :base-extension "org"
+           :publishing-directory "~/git/webstead/public"
+           :recursive t
+           :publishing-function org-html-publish-to-html
+           :headline-levels 6)
+          ("webstead-static"
+           :base-directory "~/dropbox/khs/undertakings/org_webstead"
+           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+           :publishing-directory "~/git/webstead/public"
+           :recursive t
+           :publishing-function org-publish-attachment)
+          ("webstead-rss"
+           :base-directory "~/dropbox/khs/undertakings/org_webstead"
+           :base-extension "org"
+           :html-link-home "https://jpowellrussell.com/"
+           :html-link-use-abs-url t
+           :rss-extension "xml"
+           :publishing-directory "~/git/webstead/public"
+           :publishing-function (org-rss-publish-to-rss)
+           :section-numbers nil
+           :headline-levels 1
+           :exclude-tags "no-rss"
+           :exclude ".*" ;to exclude all files
+           :include ("index.org") ; ... except index
+           :table-of-contents nil)
+          ("webstead" :components ("webstead-notes" "webstead-static" "webstead-rss"))))
+
+  ;; Some Variables for HTML Export that I want as default, so that I can
+  ;; specify locally more specific things - I find the default settings way too
+  ;; messy
+
+  (setq org-html-head ""
+        org-html-head-extra ""
+        org-html-head-include-default-style nil
+        org-html-head-include-scripts nil
+        org-html-preamble nil
+        org-html-postamble nil
+        org-html-use-infojs nil)
+
+  ;; Custom Webstead Publish Command
+  ;; This combines org-publish and staging, committing, and pushing to git
+
+  (defun jpr-webstead-publish ()
+  "One-step function to publish org-webstead to html and git to github."
+  (interactive)
+  (let ((default-directory "/Users/Jeff/git/webstead/public/")
+        (webstead-file "/Users/Jeff/git/webstead/public/index.html")
+        (webstead-rss "/Users/Jeff/git/webstead/public/index.xml"))
+    (org-publish-project "webstead")
+    (magit-stage-modified)
+    (magit-call-git "add" webstead-file)
+    (magit-call-git "commit" "-m" (concat "Webstead update " (format-time-string "%Y-%m-%d %H:%M")))
+    (magit-call-git "add" webstead-rss)
+    (magit-call-git "commit" "-m" (concat "Webstead RSS update " (format-time-string "%Y-%m-%d %H:%M")))
+    (magit-call-git "push" "origin")
+    (magit-refresh)
+    (message "Update complete")
+    ))
 
   ;; Org Capture Customizations
   ;; ----------------------------------------

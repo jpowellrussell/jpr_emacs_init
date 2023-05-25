@@ -72,117 +72,122 @@
   ;; customization based on org-roam functions)
   (setq org-roam-capture-templates
         `(
-          ("b" "Book Slip" plain
-           "*Link to Book*:
-*Writers*:
-*Leaves*:
-*Looking Up*:
-[[file:../Roam_Notes/Tags/20210311132041-books.org][Books]]
+;;           ("b" "Book Slip" plain
+;;            "*Link to Book*:
+;; *Writers*:
+;; *Leaves*:
+;; *Looking Up*:
+;; [[file:../Roam_Notes/Tags/20210311132041-books.org][Books]]
 
-** Times Read
-mm/dd/yy - mm/dd/yy
+;; ** Times Read
+;; mm/dd/yy - mm/dd/yy
 
-** Holding-On Askings
-*What was the core thesis of this book?*
-*How does this idea change my thinking about other ideas?*
-*How does knowing this influence my practical abilities?*
+;; ** Holding-On Askings
+;; *What was the core thesis of this book?*
+;; *How does this idea change my thinking about other ideas?*
+;; *How does knowing this influence my practical abilities?*
 
-** Kind of Book
+;; ** Kind of Book
 
-** Thoughts after Reading
-:PROPERTIES:
-:VISIBILITY: all
-:END:
+;; ** Thoughts after Reading
+;; :PROPERTIES:
+;; :VISIBILITY: all
+;; :END:
 
-** Key Words and Thoughts
+;; ** Key Words and Thoughts
 
-** Things to Ankify
+;; ** Things to Ankify
 
-** Outline
-:PROPERTIES:
-:VISIBILITY: all
-:END:
+;; ** Outline
+;; :PROPERTIES:
+;; :VISIBILITY: all
+;; :END:
 
-*** Chapter Name
-/One to Two Sentence Rundown of Chapter./
+;; *** Chapter Name
+;; /One to Two Sentence Rundown of Chapter./
 
-** Thorough Rundown
+;; ** Thorough Rundown
 
-** Worthwhile Askings
+;; ** Worthwhile Askings
 
-** Sayings
+;; ** Sayings
 
-** Folks and Works Named
+;; ** Folks and Works Named
 
-** Thoughts
-:PROPERTIES:
-:VISIBILITY: all
-:END:
+;; ** Thoughts
+;; :PROPERTIES:
+;; :VISIBILITY: all
+;; :END:
 
-"
-           :if-new (file+head "Slipbox/8-Books/${slug}.org"
-                              "#+title: ${title}\n\n#+PROPERTY: DATE %<%Y-%m-%d %H%M>\n#+STARTUP: overview\n\n")
+;; "
+;;            :if-new (file+head "Slipbox/8-Books/${slug}.org"
+;;                               "#+title: ${title}\n\n#+PROPERTY: DATE %<%Y-%m-%d %H%M>\n#+STARTUP: overview\n\n")
+;;            :unnarrowed t)
+          ("b" "Blog Post" entry "* ${title}\n:PROPERTIES:\n:HTML_HEADLINE_CLASS: Post\n:CUSTOM_ID: ${slug}\n:END:\n*Date*: %<%Y-%B-%d>\n\n%?\n\n/Did this post spark any thoughts? Have anything to ask or share? Feel free to send me an email at jeff DOT powell DOT russell AT gmail.com, and I'll add your thoughts below. You can also comment on the [][dreamwidth post]./\n\n
+-----\n\n"
+           :if-new (file+head "Undertakings/org_webstead/index.org"
+                              "#+title: Jeff's Webstead\n\n")
+           :prepend t
            :unnarrowed t)
           ("d" "Default" plain "%?"
            :if-new (file+head "Roam_Notes/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n\n")
           :unnarrowed t)
-          ("e" "Engagement Report" plain
-           :if-new (file+head "%(concat org-roam-directory \"/Engagement_Reports/%<%Y-%m-%d>-${slug}.org\")" "#+title: %<%Y-%m-%d>-${title}\n#+roam_alias: \n\n")
-          "[[id:1EE2E69E-14DB-4835-8C81-5C9660A39CDE][Weekly Engagement Reports]]
-- %?"
-          :unnarrowed t)
-          ("f" "Fleeting Thought" plain "%?"
-           :if-new (file+head "%(concat org-roam-slipbox-dir \"/0-Fleeting_Thoughts/%<%Y%m%d%H%M%S>-${slug}.org\")"
-                              "#+title: ${title}\n\n")
-          :unnarrowed t)
+;;           ("e" "Engagement Report" plain
+;;            :if-new (file+head "%(concat org-roam-directory \"/Engagement_Reports/%<%Y-%m-%d>-${slug}.org\")" "#+title: %<%Y-%m-%d>-${title}\n#+roam_alias: \n\n")
+;;           "[[id:1EE2E69E-14DB-4835-8C81-5C9660A39CDE][Weekly Engagement Reports]]
+;; - %?"
+;;           :unnarrowed t)
+;;           ("f" "Fleeting Thought" plain "%?"
+;;            :if-new (file+head "%(concat org-roam-slipbox-dir \"/0-Fleeting_Thoughts/%<%Y%m%d%H%M%S>-${slug}.org\")"
+;;                               "#+title: ${title}\n\n")
+          ;; :unnarrowed t)
           ("p" "Person" plain
           "*Name*: ${title}\n*About*: %?"
           :if-new (file+head "Roam_Notes/Folks/%<%Y%m%d%H%M%S>-${slug}.org"
                              "#+title: ${title}\n#+roam_alias: \n\n")
           :unnarrowed t)
-          ;; with new file-level property drawers, I like need to change the template below to put things like Slip_ID in the property drawer rather than as '#+PROPERTY'
-          ("s" "Slip" plain
-           "** Body
-   :PROPERTIES:
-   :VISIBILITY: all
-   :END:
-%i%?
+;;           ;; with new file-level property drawers, I like need to change the template below to put things like Slip_ID in the property drawer rather than as '#+PROPERTY'
+;;           ("s" "Slip" plain
+;;            "** Body
+;;    :PROPERTIES:
+;;    :VISIBILITY: all
+;;    :END:
+;; %i%?
 
-** Where From
-   :PROPERTIES:
-   :VISIBILITY: folded
-   :END:
+;; ** Where From
+;;    :PROPERTIES:
+;;    :VISIBILITY: folded
+;;    :END:
 
-** Links
-   :PROPERTIES:
-   :VISIBILITY: folded
-   :END:
+;; ** Links
+;;    :PROPERTIES:
+;;    :VISIBILITY: folded
+;;    :END:
 
-** Tags
-   :PROPERTIES:
-   :VISIBILITY: folded
-   :END:
+;; ** Tags
+;;    :PROPERTIES:
+;;    :VISIBILITY: folded
+;;    :END:
 
-"
-           :if-new (file+head "%(read-directory-name \"path: \" (concat org-roam-directory org-roam-slipbox-dir))${slug}.org"
-                              "#+title: ${title}\n\n#+PROPERTY: Slip_ID %(and (string-match \"^[a-z][a-z0-9]+\" \"${title}\")
-(match-string 0 \"${title}\"))\n#+PROPERTY: Firstness 50\n#+PROPERTY: DATE %<%Y-%m-%d %H%M>\n#+STARTUP: overview\n\n")
-           ;"%(jpr-org-roam-slip-name)-${slug}"; the way you put functions into this keyword is to put a '%' before the opening parenthesis, enclosed within a string
-           :unnarrowed t)
-          ("t" "Tag" plain
-          "This is a slip to hold backlinks that have to do with ${title}. %?"
-          :if-new (file+head "Roam_Notes/Tags/%<%Y%m%d%H%M%S>-${slug}.org"
-                             "#+title: ${title}\n#+roam_alias: \n\n")
-          :unnarrowed t)
+;; "
+;;            :if-new (file+head "%(read-directory-name \"path: \" (concat org-roam-directory org-roam-slipbox-dir))${slug}.org"
+;;                               "#+title: ${title}\n\n#+PROPERTY: Slip_ID %(and (string-match \"^[a-z][a-z0-9]+\" \"${title}\")
+;; (match-string 0 \"${title}\"))\n#+PROPERTY: Firstness 50\n#+PROPERTY: DATE %<%Y-%m-%d %H%M>\n#+STARTUP: overview\n\n")
+;;            ;"%(jpr-org-roam-slip-name)-${slug}"; the way you put functions into this keyword is to put a '%' before the opening parenthesis, enclosed within a string
+;;            :unnarrowed t)
+;;           ("t" "Tag" plain
+;;           "This is a slip to hold backlinks that have to do with ${title}. %?"
+;;           :if-new (file+head "Roam_Notes/Tags/%<%Y%m%d%H%M%S>-${slug}.org"
+;;                              "#+title: ${title}\n#+roam_alias: \n\n")
+;;           :unnarrowed t)
           ("u" "Undertaking" plain "%?"
            :if-new (file+head "Undertakings/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n\n")
           :unnarrowed t)
           )
-       )
+        )
   )
-
 ;; Org-Roam-Server Setup
 ;; ===========================================================================
 ;; Commented out for now, as v2 of org-roam does not yet work with server

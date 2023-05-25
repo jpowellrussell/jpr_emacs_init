@@ -42,10 +42,10 @@
 (use-package treemacs-magit
   :after treemacs magit)
 
-(use-package treemacs-icons-dired
-  :after treemacs dired
-  :ensure t
-  :config (treemacs-icons-dired-mode))
+;; (use-package treemacs-icons-dired
+;;   :ensure t
+;;   :after treemacs
+;;   :hook (dired-mode . treemacs-icons-dired-enable-once))
 
 (provide 'init_treemacs)
 ;;; init_treemacs.el ends here

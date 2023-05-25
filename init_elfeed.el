@@ -59,8 +59,13 @@
 ;; Allows for managing elfeed feeds in an org file, making organization and
 ;; tagging simpler
 
+;; At the moment (2023-05-24), loading elfeed-org is throwing an error when I
+;; also load ox-rss, which is weird and I have no idea why it's working like
+;; this. I'll likely have to dig into the code to work this out
+
 (use-package elfeed-org
   :straight t
+  :after (elfeed)
   :config (elfeed-org)
   )
 
@@ -80,6 +85,12 @@
   (setq elfeed-goodies/entry-pane-position 'bottom)
   )
 
+;; Okay, I worked out what the problem was with loading elfeed. In my score
+;; file, one of my rules was missing one of its keywords (":type s"), likely due
+;; to a mistaken edit I didn't know I made. So, if I get the error "missing
+;; mandatory field," go check the score file to make sure each rule has the
+;; right syntax
+
 (use-package elfeed-score
   :straight t
   :ensure t
@@ -89,9 +100,8 @@
    (setq elfeed-search-print-entry-function #'elfeed-score-print-entry)
    (setq elfeed-score-log-level 'debug)
    (setq elfeed-score-log-debug t)
-   (progn
-     (elfeed-score-enable)
-     (define-key elfeed-search-mode-map "=" elfeed-score-map))
+   (elfeed-score-enable)
+   (define-key elfeed-search-mode-map "=" elfeed-score-map)
   )
 
 (provide 'init_elfeed)

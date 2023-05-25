@@ -17,7 +17,7 @@
   :defer t
   :ensure t
   :straight t
-  :hook (dired-mode . dired-hide-details-mode)
+  :hook ((dired-mode . dired-hide-details-mode))
   :config
   )
 
@@ -25,6 +25,11 @@
 (setq dired-recursive-deletes 'always)
 (setq dired-recursive-copies 'always)
 (setq dired-dwim-target t)
+
+(use-package treemacs-icons-dired
+  :ensure t
+  :after treemacs
+  :hook (dired-mode . treemacs-icons-dired-mode))
 
 (provide 'init_dired)
 
