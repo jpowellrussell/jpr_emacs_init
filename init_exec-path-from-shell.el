@@ -20,8 +20,8 @@
   :straight t
   :if (memq window-system '(mac ns))
   :demand
-  :init
   :config
+  (setq exec-path-from-shell-variables '("GOPATH" "PATH"))
   (exec-path-from-shell-initialize))
 
 (provide 'init_exec-path-from-shell)

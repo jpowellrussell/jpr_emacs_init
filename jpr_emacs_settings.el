@@ -186,7 +186,7 @@
 (define-key global-map (kbd "C-M-q") 'unfill-region)
 
 ;; Function to make selected region sentence case, which I am frankly surprised
-;; is not a default Emacs commandw
+;; is not a default Emacs command
 ;; By Xah, found here: http://ergoemacs.org/emacs/emacs_upcase_sentence.html
 (defun xah-upcase-sentence ()
   "Upcase first letters of sentences of current text block or selection.

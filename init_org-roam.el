@@ -14,14 +14,20 @@
 ;; linked notes.
 
 ;;; Code:
+;; SQL Dependency recommended for versions of Emacs older than 29
+;; (use-package emacsql-sqlite-module :straight (emacsql-sqlite-module :type git
+;;   :host github :repo "magit/emacsql" :branch "main"))
+
 (use-package org-roam
-  :straight (org-roam :type git :host github :repo "org-roam/org-roam" :branch "v2")
+  :straight (org-roam :type git :host github :repo "org-roam/org-roam" :branch "main")
   :ensure t
   :hook ;Loading at init slows down start up considerably, but it's important
         ;enough to me to be worth it
   (after-init . ivy-mode)
-  :custom
-  (org-roam-directory (file-truename "~/dropbox/khs/"))
+  :init
+  (setq org-roam-db-location (file-truename "~/dropbox/khs/org-roam.db"))
+  (setq org-roam-directory "/users/jeff/dropbox/khs/")
+  (setq org-roam-database-connector 'sqlite-builtin)
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n c" . org-roam-capture)
@@ -30,7 +36,7 @@
   :config
   ;; General Variables and Startup
   ;; ===========================================================================
-  (org-roam-setup)
+  (org-roam-db-autosync-mode)
   (setq completion-ignore-case t)
   (setq org-roam-complete-everywhere nil)
 ;;  (setq org-roam-link-auto-replace nil)
@@ -123,12 +129,13 @@
 ;;            :if-new (file+head "Slipbox/8-Books/${slug}.org"
 ;;                               "#+title: ${title}\n\n#+PROPERTY: DATE %<%Y-%m-%d %H%M>\n#+STARTUP: overview\n\n")
 ;;            :unnarrowed t)
-          ("b" "Blog Post" entry "* ${title}\n:PROPERTIES:\n:HTML_HEADLINE_CLASS: Post\n:CUSTOM_ID: ${slug}\n:END:\n*Date*: %<%Y-%B-%d>\n\n%?\n\n/Did this post spark any thoughts? Have anything to ask or share? Feel free to send me an email at jeff DOT powell DOT russell AT gmail.com, and I'll add your thoughts below. You can also comment on the [][dreamwidth post]./\n\n
------\n\n"
-           :if-new (file+head "Undertakings/org_webstead/index.org"
-                              "#+title: Jeff's Webstead\n\n")
-           :prepend t
-           :unnarrowed t)
+          ("b" "Blog Post" plain "*** ${title} :rss:
+:PROPERTIES:\n:HTML_HEADLINE_CLASS: Post\n:CUSTOM_ID: ${slug}\n:PUBDATE: %<%Y-%m-%d %a %H:%M>\n:RSS_PERMALINK: https://jpowellrussell.com/#${slug}\n:END:\n*Date*: %<%Y-%B-%d>\n\n%?\n\n**** Post Footer :ignore:\n/Did this post spark any thoughts? Have anything to ask or share? Feel free to send me an email at jeff DOT powell DOT russell AT gmail.com, and I'll add your thoughts below. You can also comment on the [][dreamwidth post]./\n\n-----\n"
+           :target (file+olp "Undertakings/org_webstead/index.org"
+                             ("Main" "Posts"))
+           :unnarrowed t
+           :empty-lines-after 1
+           :prepend t)
           ("d" "Default" plain "%?"
            :if-new (file+head "Roam_Notes/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n\n")
@@ -147,6 +154,11 @@
           :if-new (file+head "Roam_Notes/Folks/%<%Y%m%d%H%M%S>-${slug}.org"
                              "#+title: ${title}\n#+roam_alias: \n\n")
           :unnarrowed t)
+          ("t" "Test" plain "** ${title}\nI am trying to get the prepend property to work. %?"
+           :target (file+head+olp "Undertakings/test.org"
+                                  "#+title: ${title}\n"
+                                  ("Main"))
+           :prepend t)
 ;;           ;; with new file-level property drawers, I like need to change the template below to put things like Slip_ID in the property drawer rather than as '#+PROPERTY'
 ;;           ("s" "Slip" plain
 ;;            "** Body
@@ -180,7 +192,7 @@
 ;;           "This is a slip to hold backlinks that have to do with ${title}. %?"
 ;;           :if-new (file+head "Roam_Notes/Tags/%<%Y%m%d%H%M%S>-${slug}.org"
 ;;                              "#+title: ${title}\n#+roam_alias: \n\n")
-;;           :unnarrowed t)
+          ;;           :unnarrowed t)
           ("u" "Undertaking" plain "%?"
            :if-new (file+head "Undertakings/%<%Y%m%d%H%M%S>-${slug}.org"
                               "#+title: ${title}\n\n")

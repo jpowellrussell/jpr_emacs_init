@@ -37,6 +37,10 @@
 
   ;; Libraries to Require
   ;; ----------------------------------------
+  ;; Enable Org Contrib (extra packages shipped with Org, but not part of default
+  ;; build)
+  (use-package org-contrib)
+  
   ;; Enable Org-Protocol for interaction with other programs - I'm still sorting
   ;; out the kinks here
   (require 'org-protocol)
@@ -52,6 +56,12 @@
 
   ;; Enable RSS backend for org-publish
   (use-package ox-rss)
+
+  ;; Enable ox-extra, specifically for ability to export a section without its
+  ;; headline
+  (use-package ox-extra
+    :config
+    (ox-extras-activate '(ignore-headlines)))
 
   ;; Adjust settings so that markup works over multiple lines
   (setcar (nthcdr 4 org-emphasis-regexp-components) 100)
@@ -138,11 +148,12 @@
            :base-extension "org"
            :publishing-directory "~/git/webstead/public"
            :recursive t
+           :with-tags nil
            :publishing-function org-html-publish-to-html
            :headline-levels 6)
           ("webstead-static"
            :base-directory "~/dropbox/khs/undertakings/org_webstead"
-           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|ico"
            :publishing-directory "~/git/webstead/public"
            :recursive t
            :publishing-function org-publish-attachment)
@@ -156,7 +167,8 @@
            :publishing-function (org-rss-publish-to-rss)
            :section-numbers nil
            :headline-levels 1
-           :exclude-tags "no-rss"
+           :select-tags ("rss")
+           :exclude-tags ("norss")
            :exclude ".*" ;to exclude all files
            :include ("index.org") ; ... except index
            :table-of-contents nil)
@@ -173,6 +185,17 @@
         org-html-preamble nil
         org-html-postamble nil
         org-html-use-infojs nil)
+
+  ;; Custom Org-RSS Set Up
+  ;; Define a custom version of some of the org-rss functions, I think, maybe
+  ;; via advice rather than re-writing? The goal here is to avoid some of the
+  ;; issues that seem hard-coded into its functions, like not being in the
+  ;; location of the git repository after finishing RSS export, spending forever
+  ;; indenting the file, and not recognizing the level of headlines where I put
+  ;; post titles for generating the pubdate property, which makes them not get
+  ;; exported to RSS. I've currently fixed that with an update to my capture
+  ;; template, but I dunno if that's the best way to do it or not. Oh, and this
+  ;; might need to go before the publishing project stuff above, not sure.
 
   ;; Custom Webstead Publish Command
   ;; This combines org-publish and staging, committing, and pushing to git
